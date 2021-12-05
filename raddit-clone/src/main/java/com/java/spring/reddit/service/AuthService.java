@@ -4,4 +4,6 @@ import com.java.spring.reddit.dto.RegisterRequest;
 
 public interface AuthService {
     void register(RegisterRequest registerRequest);
+
+    void verifyToken(String token);
 }
