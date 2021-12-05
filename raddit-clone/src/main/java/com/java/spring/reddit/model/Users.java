@@ -20,7 +20,7 @@ public class Users extends EntityModel {
 
     @NotEmpty(message = "User name is required")
     @Column(name = "user_name")
-    private String userName;
+    private String username;
 
     @NotEmpty(message = "Email is required")
     @Column(name = "email")

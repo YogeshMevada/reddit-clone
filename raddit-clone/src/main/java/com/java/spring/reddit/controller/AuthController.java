@@ -1,5 +1,6 @@
 package com.java.spring.reddit.controller;
 
+import com.java.spring.reddit.dto.LoginRequest;
 import com.java.spring.reddit.dto.RegisterRequest;
 import com.java.spring.reddit.model.NotificationEmail;
 import com.java.spring.reddit.service.AuthService;
@@ -36,6 +37,13 @@ public class AuthController {
         log.info("Registration started.");
         authService.verifyToken(token);
         return new ResponseEntity<>("User verification successful", HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid final LoginRequest loginRequest) {
+        log.info("Login started.");
+        authService.login(loginRequest);
+        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
     }
 
     @PostMapping("/sendmail")
