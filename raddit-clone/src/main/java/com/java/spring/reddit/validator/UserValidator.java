@@ -18,6 +18,8 @@ public class UserValidator {
 
     public void validateUserRequest(final RegisterRequest registerRequest) {
         final Optional<Users> user = usersRepository.findByUserName(registerRequest.getUsername());
-        user.orElseThrow(() -> new UserValidationException("User already present.", HttpStatus.CONFLICT));
+        if (user.isPresent()) {
+            throw new UserValidationException("User already present.", HttpStatus.CONFLICT);
+        }
     }
 }

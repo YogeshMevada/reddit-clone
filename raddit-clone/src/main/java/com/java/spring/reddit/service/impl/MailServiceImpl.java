@@ -24,15 +24,16 @@ public class MailServiceImpl implements MailService {
     public void sendMail(final NotificationEmail notificationEmail) {
         final MimeMessagePreparator mimeMessagePreparator = mimeMessage -> {
             final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+            mimeMessageHelper.setFrom("info@reddit.clone.local");
             mimeMessageHelper.setTo(notificationEmail.getRecipient());
             mimeMessageHelper.setSubject(notificationEmail.getSubject());
             mimeMessageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()));
         };
-
         try {
             mailSender.send(mimeMessagePreparator);
-            log.info("Registration mail sent");
+            log.info("Registration mail sent for user : {}", notificationEmail.getRecipient());
         } catch (final MailException e) {
+            log.error(e.getMessage(), e);
             throw new SystemException("Error occurred while sending registration mail to user.");
         }
     }

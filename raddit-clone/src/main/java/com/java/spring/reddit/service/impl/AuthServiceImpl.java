@@ -2,6 +2,7 @@ package com.java.spring.reddit.service.impl;
 
 import com.java.spring.reddit.constant.Status;
 import com.java.spring.reddit.dto.RegisterRequest;
+import com.java.spring.reddit.model.NotificationEmail;
 import com.java.spring.reddit.model.Users;
 import com.java.spring.reddit.model.VerificationToken;
 import com.java.spring.reddit.repository.UsersRepository;
@@ -15,7 +16,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.ValidationException;
+import java.util.Optional;
 import java.util.UUID;
+
+import static com.java.spring.reddit.constant.Status.*;
 
 @Slf4j
 @Service
@@ -35,19 +40,35 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void register(final RegisterRequest registerRequest) {
+        log.info("User registration service started for : {}", registerRequest.getUsername());
         userValidator.validateUserRequest(registerRequest);
 
         final Users users = new Users();
         users.setEmail(registerRequest.getEmail());
         users.setUserName(registerRequest.getUsername());
         users.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        users.setStatus(Status.CREATED);
-
+        users.setStatus(CREATED);
         usersRepository.save(users);
 
-        String token = generateVerificationToken(users);
+        final String token = generateVerificationToken(users);
+        mailService.sendMail(new NotificationEmail("Please Activate your Account.", users.getEmail(), "Thank you for Signing up to Reddit clone, " +
+                "please click/open url to activate your account: http://localhost:8080/api/v1/auth/verification/" + token));
+    }
 
+    @Override
+    @Transactional
+    public void verifyToken(final String token) {
+        final Optional<VerificationToken> tokens = verificationTokenRepository.findByToken(token);
+        final VerificationToken verificationToken = tokens.orElseThrow(() -> new ValidationException("Token not found."));
 
+        //TODO: validate token expiry
+
+        final Users users = verificationToken.getUser();
+        users.setStatus(ACTIVE);
+        usersRepository.save(users);
+        log.info("User Activated successfully");
+
+        mailService.sendMail(new NotificationEmail("User Account activated.", users.getEmail(), "Your account is activated successfully."));
     }
 
     private String generateVerificationToken(final Users users) {
@@ -55,9 +76,9 @@ public class AuthServiceImpl implements AuthService {
         final VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(users);
-
+        //TODO: set token expiry time for validation.
         verificationTokenRepository.save(verificationToken);
-
+        log.info("Token generated: {}", token);
         return token;
     }
 }
