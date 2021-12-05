@@ -1,6 +1,6 @@
 package com.java.spring.reddit.service.impl;
 
-import com.java.spring.reddit.constant.Status;
+import com.java.spring.reddit.dto.LoginRequest;
 import com.java.spring.reddit.dto.RegisterRequest;
 import com.java.spring.reddit.model.NotificationEmail;
 import com.java.spring.reddit.model.Users;
@@ -12,6 +12,9 @@ import com.java.spring.reddit.service.MailService;
 import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +40,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final AuthenticationManager authenticationManager;
+
     @Override
     @Transactional
     public void register(final RegisterRequest registerRequest) {
@@ -45,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
 
         final Users users = new Users();
         users.setEmail(registerRequest.getEmail());
-        users.setUserName(registerRequest.getUsername());
+        users.setUsername(registerRequest.getUsername());
         users.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         users.setStatus(CREATED);
         usersRepository.save(users);
@@ -69,6 +74,11 @@ public class AuthServiceImpl implements AuthService {
         log.info("User Activated successfully");
 
         mailService.sendMail(new NotificationEmail("User Account activated.", users.getEmail(), "Your account is activated successfully."));
+    }
+
+    @Override
+    public void login(final LoginRequest loginRequest) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
     }
 
     private String generateVerificationToken(final Users users) {
