@@ -8,9 +8,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.PrivateKey;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.*;
+import java.security.cert.CertificateException;
 
 @Slf4j
 @Service
@@ -22,18 +23,28 @@ public class JwtProvider {
     public void init() {
         try {
             keyStore = KeyStore.getInstance("JKS");
-        } catch (final KeyStoreException e) {
-            log.error("Error occurred while loading keystore");
+            final InputStream resourceAsStream = getClass().getResourceAsStream("/reddit-clone.jks");
+            keyStore.load(resourceAsStream, "secret".toCharArray());
+        } catch (final KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+            log.error("Error occurred while loading keystore", e);
             throw new SystemException("Error occurred while loading keystore");
         }
     }
 
     public String generateToken(final Authentication authentication) {
         final User users = (User) authentication.getPrincipal();
-        return Jwts.builder().setSubject(users.getUsername()).signWith(getPrivateKey()).compact();
+        return Jwts.builder()
+                .setSubject(users.getUsername())
+                .signWith(getPrivateKey())
+                .compact();
     }
 
     private PrivateKey getPrivateKey() {
-        return null;
+        try {
+            return (PrivateKey) keyStore.getKey("reddit-clone-sign", "secret".toCharArray());
+        } catch (final KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+            log.error("Could not load private key", e);
+            throw new SystemException("Could not load private key");
+        }
     }
 }

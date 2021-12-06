@@ -1,6 +1,7 @@
 package com.java.spring.reddit.service;
 
-import com.java.spring.reddit.dto.LoginRequest;
+import com.java.spring.reddit.dto.AuthenticationRequest;
+import com.java.spring.reddit.dto.AuthenticationResponse;
 import com.java.spring.reddit.dto.RegisterRequest;
 
 public interface AuthService {
@@ -8,5 +9,5 @@ public interface AuthService {
 
     void verifyToken(String token);
 
-    void login(LoginRequest loginRequest);
+    AuthenticationResponse login(AuthenticationRequest loginRequest);
 }

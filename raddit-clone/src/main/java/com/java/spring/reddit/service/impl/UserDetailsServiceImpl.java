@@ -29,8 +29,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
         final Optional<Users> userOptional = userService.findByUsername(username);
-        final Users user = userOptional.orElseThrow(() -> new ValidationException("No User found"));
-        return new User(user.getUsername(), user.getPassword(), ACTIVE.equals(user.getStatus()), true, true, true, getAuthorities("USER"));
+        final Users user = userOptional
+                .orElseThrow(() -> new ValidationException("No User found"));
+        return new User(user.getUsername(),
+                user.getPassword(),
+                ACTIVE.equals(user.getStatus()),
+                true,
+                true,
+                true,
+                getAuthorities("USER"));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(final String role) {
