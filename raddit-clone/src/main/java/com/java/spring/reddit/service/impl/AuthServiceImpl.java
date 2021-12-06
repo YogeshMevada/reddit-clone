@@ -2,6 +2,7 @@ package com.java.spring.reddit.service.impl;
 
 import com.java.spring.reddit.dto.LoginRequest;
 import com.java.spring.reddit.dto.RegisterRequest;
+import com.java.spring.reddit.exception.UserValidationException;
 import com.java.spring.reddit.model.NotificationEmail;
 import com.java.spring.reddit.model.Users;
 import com.java.spring.reddit.model.VerificationToken;
@@ -12,6 +13,7 @@ import com.java.spring.reddit.service.MailService;
 import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -69,6 +71,9 @@ public class AuthServiceImpl implements AuthService {
         //TODO: validate token expiry
 
         final Users users = verificationToken.getUser();
+        if (ACTIVE.equals(users.getStatus())) {
+            throw new UserValidationException("User is already active & verified.");
+        }
         users.setStatus(ACTIVE);
         usersRepository.save(users);
         log.info("User Activated successfully");
