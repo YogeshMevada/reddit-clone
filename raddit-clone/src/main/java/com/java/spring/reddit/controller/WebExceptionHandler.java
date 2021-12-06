@@ -1,6 +1,7 @@
 package com.java.spring.reddit.controller;
 
 import com.java.spring.reddit.dto.ErrorResponse;
+import com.java.spring.reddit.exception.AuthenticationException;
 import com.java.spring.reddit.exception.SystemException;
 import com.java.spring.reddit.exception.UserValidationException;
 import lombok.extern.slf4j.Slf4j;
@@ -11,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
 @ControllerAdvice(annotations = RestController.class)
@@ -35,6 +35,13 @@ public class WebExceptionHandler {
         return new ErrorResponse(BAD_REQUEST, exception.getMessage(), exception.getLocalizedMessage());
     }
 
+    @ResponseBody
+    @ResponseStatus(UNAUTHORIZED)
+    @ExceptionHandler(AuthenticationException.class)
+    public ErrorResponse handleException(final AuthenticationException exception) {
+        log.error("Exception occurred", exception);
+        return new ErrorResponse(UNAUTHORIZED, exception.getMessage(), exception.getLocalizedMessage());
+    }
 
     @ResponseBody
     @ResponseStatus(INTERNAL_SERVER_ERROR)

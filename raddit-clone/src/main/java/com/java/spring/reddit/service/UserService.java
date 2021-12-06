@@ -1,6 +1,6 @@
 package com.java.spring.reddit.service;
 
-import com.java.spring.reddit.model.Users;
+import com.java.spring.reddit.entities.Users;
 
 import java.util.Optional;
 

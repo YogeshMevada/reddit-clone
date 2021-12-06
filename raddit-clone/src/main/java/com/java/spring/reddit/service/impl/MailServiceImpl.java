@@ -1,7 +1,7 @@
 package com.java.spring.reddit.service.impl;
 
+import com.java.spring.reddit.entities.NotificationEmail;
 import com.java.spring.reddit.exception.SystemException;
-import com.java.spring.reddit.model.NotificationEmail;
 import com.java.spring.reddit.service.MailService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
