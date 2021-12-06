@@ -3,7 +3,7 @@ package com.java.spring.reddit.controller;
 import com.java.spring.reddit.dto.AuthenticationRequest;
 import com.java.spring.reddit.dto.AuthenticationResponse;
 import com.java.spring.reddit.dto.RegisterRequest;
-import com.java.spring.reddit.model.NotificationEmail;
+import com.java.spring.reddit.entities.NotificationEmail;
 import com.java.spring.reddit.service.AuthService;
 import com.java.spring.reddit.service.MailService;
 import lombok.AllArgsConstructor;

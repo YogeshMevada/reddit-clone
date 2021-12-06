@@ -1,6 +1,6 @@
 package com.java.spring.reddit.repository;
 
-import com.java.spring.reddit.model.Users;
+import com.java.spring.reddit.entities.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

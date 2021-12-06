@@ -1,4 +1,4 @@
-package com.java.spring.reddit.model;
+package com.java.spring.reddit.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

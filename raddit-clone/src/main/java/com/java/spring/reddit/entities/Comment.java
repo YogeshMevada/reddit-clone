@@ -1,4 +1,4 @@
-package com.java.spring.reddit.model;
+package com.java.spring.reddit.entities;
 
 import com.java.spring.reddit.constant.DatabaseConstants;
 import lombok.AllArgsConstructor;
@@ -6,8 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
-import java.time.Instant;
+import javax.validation.constraints.NotEmpty;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -15,16 +14,17 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "token", schema = DatabaseConstants.SCHEMA)
-public class VerificationToken extends EntityModel {
+@Table(name = "comment", schema = DatabaseConstants.SCHEMA)
+public class Comment extends EntityModel {
 
-    @Column(name = "token")
-    private String token;
+    @NotEmpty
+    @Column(name = "text")
+    private String text;
+
+    @ManyToOne(fetch = LAZY)
+    private Post post;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users user;
-
-    @Column(name = "expires_on")
-    private Instant expiresOn;
 }

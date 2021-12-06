@@ -1,4 +1,4 @@
-package com.java.spring.reddit.service.impl;
+package com.java.spring.reddit.security;
 
 import com.java.spring.reddit.exception.SystemException;
 import io.jsonwebtoken.Jwts;
@@ -39,12 +39,38 @@ public class JwtProvider {
                 .compact();
     }
 
+    public boolean validateToken(final String token) {
+        Jwts.parserBuilder()
+                .setSigningKey(getPublicKey())
+                .build()
+                .parseClaimsJwt(token);
+        return true;
+    }
+
+    public String getUsername(final String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getPublicKey())
+                .build()
+                .parseClaimsJwt(token)
+                .getBody()
+                .getSubject();
+    }
+
     private PrivateKey getPrivateKey() {
         try {
             return (PrivateKey) keyStore.getKey("reddit-clone-sign", "secret".toCharArray());
         } catch (final KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             log.error("Could not load private key", e);
             throw new SystemException("Could not load private key");
+        }
+    }
+
+    private PublicKey getPublicKey() {
+        try {
+            return keyStore.getCertificate("reddit-clone-sign").getPublicKey();
+        } catch (final KeyStoreException e) {
+            log.error("Could not load public key", e);
+            throw new SystemException("Could not load public key");
         }
     }
 }

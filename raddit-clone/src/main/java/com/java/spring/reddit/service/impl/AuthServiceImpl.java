@@ -3,30 +3,34 @@ package com.java.spring.reddit.service.impl;
 import com.java.spring.reddit.dto.AuthenticationRequest;
 import com.java.spring.reddit.dto.AuthenticationResponse;
 import com.java.spring.reddit.dto.RegisterRequest;
+import com.java.spring.reddit.entities.NotificationEmail;
+import com.java.spring.reddit.entities.Users;
+import com.java.spring.reddit.entities.VerificationToken;
+import com.java.spring.reddit.exception.AuthenticationException;
 import com.java.spring.reddit.exception.UserValidationException;
-import com.java.spring.reddit.model.NotificationEmail;
-import com.java.spring.reddit.model.Users;
-import com.java.spring.reddit.model.VerificationToken;
 import com.java.spring.reddit.repository.UsersRepository;
 import com.java.spring.reddit.repository.VerificationTokenRepository;
+import com.java.spring.reddit.security.JwtProvider;
 import com.java.spring.reddit.service.AuthService;
 import com.java.spring.reddit.service.MailService;
 import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.java.spring.reddit.constant.Status.*;
+import static com.java.spring.reddit.constant.Status.ACTIVE;
+import static com.java.spring.reddit.constant.Status.CREATED;
 
 @Slf4j
 @Service
@@ -89,12 +93,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthenticationResponse login(final AuthenticationRequest authenticationRequest) {
-        final Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
-        final String token = jwtProvider.generateToken(authenticate);
-        return new AuthenticationResponse(token, authenticationRequest.getUsername());
+        try {
+            final Authentication authenticate = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authenticate);
+            final String token = jwtProvider.generateToken(authenticate);
+            return new AuthenticationResponse(token, authenticationRequest.getUsername());
+        } catch (final BadCredentialsException e) {
+            throw new AuthenticationException("Username password is wrong.");
+        }
     }
 
     private String generateVerificationToken(final Users users) {

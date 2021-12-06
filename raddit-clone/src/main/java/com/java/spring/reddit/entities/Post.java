@@ -1,4 +1,4 @@
-package com.java.spring.reddit.model;
+package com.java.spring.reddit.entities;
 
 import com.java.spring.reddit.constant.DatabaseConstants;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,9 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Table(name = "post", schema = DatabaseConstants.SCHEMA)
 public class Post extends EntityModel {
+
+    @Column(name = "sub_reddit_id")
+    private Long subRedditId;
 
     @NotBlank(message = "Post name can not be empty or null")
     @Column(name = "post_name")

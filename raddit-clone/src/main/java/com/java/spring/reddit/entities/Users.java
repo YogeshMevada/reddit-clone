@@ -1,4 +1,4 @@
-package com.java.spring.reddit.model;
+package com.java.spring.reddit.entities;
 
 import com.java.spring.reddit.constant.DatabaseConstants;
 import com.java.spring.reddit.constant.Status;

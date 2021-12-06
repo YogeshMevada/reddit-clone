@@ -1,6 +1,6 @@
 package com.java.spring.reddit.service.impl;
 
-import com.java.spring.reddit.model.Users;
+import com.java.spring.reddit.entities.Users;
 import com.java.spring.reddit.repository.UsersRepository;
 import com.java.spring.reddit.service.UserService;
 import lombok.AllArgsConstructor;
