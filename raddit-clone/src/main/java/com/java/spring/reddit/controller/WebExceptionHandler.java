@@ -1,6 +1,7 @@
 package com.java.spring.reddit.controller;
 
 import com.java.spring.reddit.dto.ErrorResponse;
+import com.java.spring.reddit.exception.SystemException;
 import com.java.spring.reddit.exception.UserValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -30,6 +31,15 @@ public class WebExceptionHandler {
     @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(UserValidationException.class)
     public ErrorResponse handleException(final UserValidationException exception) {
+        log.error("Exception occurred", exception);
+        return new ErrorResponse(BAD_REQUEST, exception.getMessage(), exception.getLocalizedMessage());
+    }
+
+
+    @ResponseBody
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(SystemException.class)
+    public ErrorResponse handleException(final SystemException exception) {
         log.error("Exception occurred", exception);
         return new ErrorResponse(BAD_REQUEST, exception.getMessage(), exception.getLocalizedMessage());
     }

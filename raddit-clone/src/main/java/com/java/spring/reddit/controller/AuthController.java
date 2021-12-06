@@ -1,6 +1,7 @@
 package com.java.spring.reddit.controller;
 
-import com.java.spring.reddit.dto.LoginRequest;
+import com.java.spring.reddit.dto.AuthenticationRequest;
+import com.java.spring.reddit.dto.AuthenticationResponse;
 import com.java.spring.reddit.dto.RegisterRequest;
 import com.java.spring.reddit.model.NotificationEmail;
 import com.java.spring.reddit.service.AuthService;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.websocket.server.PathParam;
 
 @Slf4j
 @RestController
@@ -40,10 +40,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid final LoginRequest loginRequest) {
+    public AuthenticationResponse login(@RequestBody @Valid final AuthenticationRequest loginRequest) {
         log.info("Login started.");
-        authService.login(loginRequest);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        return authService.login(loginRequest);
     }
 
     @PostMapping("/sendmail")

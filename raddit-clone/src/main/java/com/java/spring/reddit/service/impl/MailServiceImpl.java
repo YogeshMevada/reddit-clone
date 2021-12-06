@@ -32,6 +32,7 @@ public class MailServiceImpl implements MailService {
             mimeMessageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()));
         };
         try {
+            // TODO: Uncomment below line to send emails.
 //            mailSender.send(mimeMessagePreparator);
             log.info("Registration mail sent for user : {}", notificationEmail.getRecipient());
         } catch (final MailException e) {

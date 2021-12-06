@@ -1,6 +1,7 @@
 package com.java.spring.reddit.service.impl;
 
-import com.java.spring.reddit.dto.LoginRequest;
+import com.java.spring.reddit.dto.AuthenticationRequest;
+import com.java.spring.reddit.dto.AuthenticationResponse;
 import com.java.spring.reddit.dto.RegisterRequest;
 import com.java.spring.reddit.exception.UserValidationException;
 import com.java.spring.reddit.model.NotificationEmail;
@@ -13,10 +14,10 @@ import com.java.spring.reddit.service.MailService;
 import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authorization.AuthorizationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +45,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final AuthenticationManager authenticationManager;
 
+    private final JwtProvider jwtProvider;
+
     @Override
     @Transactional
     public void register(final RegisterRequest registerRequest) {
@@ -58,8 +61,11 @@ public class AuthServiceImpl implements AuthService {
         usersRepository.save(users);
 
         final String token = generateVerificationToken(users);
-        mailService.sendMail(new NotificationEmail("Please Activate your Account.", users.getEmail(), "Thank you for Signing up to Reddit clone, " +
-                "please click/open url to activate your account: http://localhost:8080/api/v1/auth/verification/" + token));
+        mailService.sendMail(new NotificationEmail("Please Activate your Account.",
+                users.getEmail(),
+                "Thank you for Signing up to Reddit clone, " +
+                        "please click/open url to activate your account: " +
+                        "http://localhost:8080/api/v1/auth/verification/" + token));
     }
 
     @Override
@@ -67,23 +73,28 @@ public class AuthServiceImpl implements AuthService {
     public void verifyToken(final String token) {
         final Optional<VerificationToken> tokens = verificationTokenRepository.findByToken(token);
         final VerificationToken verificationToken = tokens.orElseThrow(() -> new ValidationException("Token not found."));
-
-        //TODO: validate token expiry
-
         final Users users = verificationToken.getUser();
         if (ACTIVE.equals(users.getStatus())) {
             throw new UserValidationException("User is already active & verified.");
         }
+        //TODO: validate token expiry
         users.setStatus(ACTIVE);
         usersRepository.save(users);
         log.info("User Activated successfully");
 
-        mailService.sendMail(new NotificationEmail("User Account activated.", users.getEmail(), "Your account is activated successfully."));
+        mailService.sendMail(new NotificationEmail("User Account activated.",
+                users.getEmail(),
+                "Your account is activated successfully."));
     }
 
     @Override
-    public void login(final LoginRequest loginRequest) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    public AuthenticationResponse login(final AuthenticationRequest authenticationRequest) {
+        final Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+                        authenticationRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        final String token = jwtProvider.generateToken(authenticate);
+        return new AuthenticationResponse(token, authenticationRequest.getUsername());
     }
 
     private String generateVerificationToken(final Users users) {
