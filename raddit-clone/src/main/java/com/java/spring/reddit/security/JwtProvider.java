@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
+import java.util.Date;
+import java.util.HashMap;
 
 @Slf4j
 @Service
@@ -34,7 +36,10 @@ public class JwtProvider {
     public String generateToken(final Authentication authentication) {
         final User users = (User) authentication.getPrincipal();
         return Jwts.builder()
+                .setClaims(new HashMap<>())
                 .setSubject(users.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(getPrivateKey())
                 .compact();
     }

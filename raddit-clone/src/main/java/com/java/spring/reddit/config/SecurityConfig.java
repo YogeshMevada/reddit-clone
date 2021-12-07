@@ -1,5 +1,6 @@
 package com.java.spring.reddit.config;
 
+import com.java.spring.reddit.security.JwtAuthenticationFilter;
 import com.java.spring.reddit.service.impl.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @AllArgsConstructor
@@ -18,15 +20,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
+        http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/v1/auth/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
+
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
