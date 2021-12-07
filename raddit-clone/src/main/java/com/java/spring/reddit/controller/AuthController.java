@@ -17,8 +17,8 @@ import javax.validation.constraints.NotBlank;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/auth")
 @AllArgsConstructor
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private AuthService authService;

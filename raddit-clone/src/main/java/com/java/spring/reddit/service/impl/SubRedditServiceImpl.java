@@ -1,6 +1,7 @@
 package com.java.spring.reddit.service.impl;
 
 import com.java.spring.reddit.dto.SubRedditDto;
+import com.java.spring.reddit.dto.SubRedditResponseDto;
 import com.java.spring.reddit.entities.SubReddit;
 import com.java.spring.reddit.repository.SubRedditRepository;
 import com.java.spring.reddit.service.SubRedditService;
@@ -30,10 +31,11 @@ public class SubRedditServiceImpl implements SubRedditService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<SubRedditDto> getAll() {
-        return subRedditRepository.findAll().stream()
+    public SubRedditResponseDto getAll() {
+        final List<SubRedditDto> subRedditDtos = subRedditRepository.findAll().stream()
                 .map(this::mapToSubRedditDto)
                 .collect(Collectors.toList());
+        return new SubRedditResponseDto(subRedditDtos, subRedditDtos.size());
     }
 
     private SubReddit mapToSubReddit(final SubRedditDto subRedditDto) {

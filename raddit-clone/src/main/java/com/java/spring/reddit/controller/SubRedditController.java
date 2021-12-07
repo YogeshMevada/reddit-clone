@@ -1,6 +1,7 @@
 package com.java.spring.reddit.controller;
 
 import com.java.spring.reddit.dto.SubRedditDto;
+import com.java.spring.reddit.dto.SubRedditResponseDto;
 import com.java.spring.reddit.service.SubRedditService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -28,7 +28,7 @@ public class SubRedditController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<SubRedditDto>> getSubReddits() {
+    public ResponseEntity<SubRedditResponseDto> getSubReddits() {
         log.info("Get subreddits");
         return new ResponseEntity<>(subRedditService.getAll(), OK);
     }
