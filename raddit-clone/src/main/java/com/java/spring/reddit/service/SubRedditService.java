@@ -1,12 +1,11 @@
 package com.java.spring.reddit.service;
 
 import com.java.spring.reddit.dto.SubRedditDto;
-
-import java.util.List;
+import com.java.spring.reddit.dto.SubRedditResponseDto;
 
 public interface SubRedditService {
 
     SubRedditDto save(SubRedditDto subRedditDto);
 
-    List<SubRedditDto> getAll();
+    SubRedditResponseDto getAll();
 }
