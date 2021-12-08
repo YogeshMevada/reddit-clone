@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -24,12 +25,18 @@ public class SubRedditController {
     @PostMapping("")
     public ResponseEntity<SubRedditDto> createSubReddit(@RequestBody @Valid final SubRedditDto subRedditDto) {
         log.info("Create subreddit");
-        return new ResponseEntity<>(subRedditService.save(subRedditDto), CREATED);
+        return new ResponseEntity<>(subRedditService.createSubReddit(subRedditDto), CREATED);
     }
 
     @GetMapping("")
     public ResponseEntity<SubRedditResponseDto> getSubReddits() {
         log.info("Get subreddits");
-        return new ResponseEntity<>(subRedditService.getAll(), OK);
+        return new ResponseEntity<>(subRedditService.findAll(), OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SubRedditDto> getSubReddit(@PathVariable @NotBlank Long id) {
+        log.info("Get subreddits");
+        return new ResponseEntity<>(subRedditService.getSubReddit(id), OK);
     }
 }
