@@ -1,6 +1,8 @@
 package com.java.spring.reddit.security;
 
 import com.java.spring.reddit.exception.SystemException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
