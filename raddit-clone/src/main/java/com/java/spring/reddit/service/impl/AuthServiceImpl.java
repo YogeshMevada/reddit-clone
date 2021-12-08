@@ -7,6 +7,7 @@ import com.java.spring.reddit.entities.NotificationEmail;
 import com.java.spring.reddit.entities.Users;
 import com.java.spring.reddit.entities.VerificationToken;
 import com.java.spring.reddit.exception.AuthenticationException;
+import com.java.spring.reddit.exception.SystemException;
 import com.java.spring.reddit.exception.UserValidationException;
 import com.java.spring.reddit.repository.UsersRepository;
 import com.java.spring.reddit.repository.VerificationTokenRepository;
@@ -20,6 +21,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +105,13 @@ public class AuthServiceImpl implements AuthService {
         } catch (final BadCredentialsException e) {
             throw new AuthenticationException("Username password is wrong.");
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Users getCurrentUser() {
+        final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return usersRepository.findByUsername(user.getUsername()).orElseThrow(() -> new SystemException("User could not be found."));
     }
 
     private String generateVerificationToken(final Users users) {

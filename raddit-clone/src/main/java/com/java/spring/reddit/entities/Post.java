@@ -20,8 +20,8 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "post", schema = DatabaseConstants.SCHEMA)
 public class Post extends EntityModel {
 
-    @Column(name = "sub_reddit_id")
-    private Long subRedditId;
+    @ManyToOne
+    private SubReddit subReddit;
 
     @NotBlank(message = "Post name can not be empty or null")
     @Column(name = "post_name")
