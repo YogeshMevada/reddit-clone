@@ -1,4 +1,4 @@
-package com.java.spring.reddit.controller;
+package com.java.spring.reddit.exception;
 
 import com.java.spring.reddit.dto.ErrorResponse;
 import com.java.spring.reddit.exception.AuthenticationException;
