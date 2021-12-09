@@ -1,9 +1,6 @@
 package com.java.spring.reddit.exception;
 
 import com.java.spring.reddit.dto.ErrorResponse;
-import com.java.spring.reddit.exception.AuthenticationException;
-import com.java.spring.reddit.exception.SystemException;
-import com.java.spring.reddit.exception.UserValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "54e36a0f-023b-4ffd-b1a0-db89baa6c7f7",
+		"name": "Training",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Reddit Clone",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"tony.stark@reddit.clone.local\",\r\n    \"username\":\"tony.stark\",\r\n    \"password\":\"tony.stark\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User Verification",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/auth/verification/a08c255d-bc67-4f7b-a728-350acf3dd31c",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"auth",
+								"verification",
+								"a08c255d-bc67-4f7b-a728-350acf3dd31c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authenticate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"tony.stark\",\r\n    \"password\":\"tony.stark\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Subreddits",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/subreddit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"subreddit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create SubReddit",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"/r/Second Subreddit\",\r\n    \"description\":\"This is the second Subreddit.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/subreddit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"subreddit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All SubReddits",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/subreddit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"subreddit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Post",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"subRedditName\": \"/r/Second Subreddit\",\r\n\t\"postName\": \"Second Post\",\r\n\t\"url\": \"https://google.com\",\r\n\t\"description\": \"This is First post for Second Subreddit\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/post",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Posts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/post",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Posts By Subreddit",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/post/subreddit/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"post",
+								"subreddit",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Posts By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/post/user/tony.stark",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"post",
+								"user",
+								"tony.stark"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"postId\": \"2\",\r\n\t\"text\": \"Fisrt comment under Second post of Second subreddit.\",\r\n\t\"username\": \"tony.stark\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/comment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Comments By Post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/comment/post/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"comment",
+								"post",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Comments By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/reddit-clone/api/v1/comment/user/tony.stark",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"reddit-clone",
+								"api",
+								"v1",
+								"comment",
+								"user",
+								"tony.stark"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ0b255LnN0YXJrIiwiaWF0IjoxNjM5MDMwMzc3LCJleHAiOjE2MzkwNjYzNzd9.NiqRxNW0JoE3EhKB0AgzyPHE_PbiGZeatW7Lqn7qD_-BIBFS1JtVqSEz74wEFgzKvyq1Zu5r4ak-RUoQ_MWT1fZAMy5H3MVFZSvuyjdg8-715hRbhnP3RYP1V6M-oq7DBSTq1t9DsBp2sC2_MHQPW_ZFbtBJG8MxiJwSzEAgEDBRulfRE35FJ77_MVjKPQvcmwYUEjGrXikePvyMsuiUfdMva7yVDCycHErSdh_ozfNziG7FVP74obH9dOfmTduRQ1IrReBoDUhi3l83-lz4KTVraFFAB4riZ3efx6--i7-8rgukWkxtLHaJLUqZmWaveUVAqVOJWKeG6wJ7gybHNg",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

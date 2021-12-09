@@ -1,18 +1,23 @@
 package com.java.spring.reddit.service;
 
-import com.java.spring.reddit.dto.PostDto;
+import com.java.spring.reddit.dto.PostRequest;
+import com.java.spring.reddit.dto.PostResponse;
+import com.java.spring.reddit.entities.Post;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostService {
 
-    PostDto getPost(Long id);
+    Optional<Post> findById(Long id);
 
-    PostDto createPost(PostDto postDto);
+    PostResponse getPost(Long id);
 
-    List<PostDto> findAllPosts();
+    PostResponse createPost(PostRequest postDto);
 
-    List<PostDto> getPostsBySubReddit(Long id);
+    List<PostResponse> findAllPosts();
 
-    List<PostDto> getPostsByUsername(String name);
+    List<PostResponse> getPostsBySubReddit(Long id);
+
+    List<PostResponse> getPostsByUser(String name);
 }
