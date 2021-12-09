@@ -9,8 +9,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubRedditResponseDto {
+public class SubRedditResponse {
 
-    public List<SubRedditDto> subReddits;
+    public List<SubRedditRequest> subReddits;
     public Integer count;
 }

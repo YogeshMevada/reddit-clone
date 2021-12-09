@@ -1,11 +1,12 @@
 package com.java.spring.reddit.service.impl;
 
-import com.java.spring.reddit.dto.SubRedditDto;
-import com.java.spring.reddit.dto.SubRedditResponseDto;
+import com.java.spring.reddit.dto.SubRedditRequest;
+import com.java.spring.reddit.dto.SubRedditResponse;
 import com.java.spring.reddit.entities.SubReddit;
 import com.java.spring.reddit.exception.SystemException;
 import com.java.spring.reddit.mapper.SubRedditMapper;
 import com.java.spring.reddit.repository.SubRedditRepository;
+import com.java.spring.reddit.service.AuthService;
 import com.java.spring.reddit.service.SubRedditService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,24 +22,26 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SubRedditServiceImpl implements SubRedditService {
 
-    final SubRedditRepository subRedditRepository;
+    private final SubRedditRepository subRedditRepository;
 
-    final SubRedditMapper subRedditMapper;
+    private final AuthService authService;
+
+    private final SubRedditMapper subRedditMapper;
 
     @Override
     @Transactional
-    public SubRedditDto createSubReddit(final SubRedditDto subRedditDto) {
-        final SubReddit subReddit = subRedditMapper.mapToSubReddit(subRedditDto);
+    public SubRedditRequest createSubReddit(final SubRedditRequest subRedditRequest) {
+        final SubReddit subReddit = subRedditMapper.mapToSubReddit(subRedditRequest, authService.getCurrentUser());
         final SubReddit savedSubReddit = subRedditRepository.save(subReddit);
-        subRedditDto.setId(savedSubReddit.getId());
-        return subRedditDto;
+        subRedditRequest.setId(savedSubReddit.getId());
+        return subRedditRequest;
     }
 
     @Override
     @Transactional(readOnly = true)
-    public SubRedditResponseDto findAll() {
-        final List<SubRedditDto> subRedditDtos = subRedditRepository.findAll().stream().map(subRedditMapper::mapToSubRedditDto).collect(Collectors.toList());
-        return new SubRedditResponseDto(subRedditDtos, subRedditDtos.size());
+    public SubRedditResponse findAll() {
+        final List<SubRedditRequest> subRedditDtos = subRedditRepository.findAll().stream().map(subRedditMapper::mapToSubRedditDto).collect(Collectors.toList());
+        return new SubRedditResponse(subRedditDtos, subRedditDtos.size());
     }
 
     @Override
@@ -48,8 +51,8 @@ public class SubRedditServiceImpl implements SubRedditService {
 
     @Override
     @Transactional(readOnly = true)
-    public SubRedditDto getSubReddit(final Long id) {
-        final SubReddit subReddit = subRedditRepository.findById(id).orElseThrow(() -> new SystemException("No subreddit found with id " + id));
+    public SubRedditRequest getSubReddit(final Long id) {
+        final SubReddit subReddit = findById(id).orElseThrow(() -> new SystemException("No subreddit found with id " + id));
         return subRedditMapper.mapToSubRedditDto(subReddit);
     }
 

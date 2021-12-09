@@ -9,14 +9,11 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubRedditDto {
+public class CommentRequest {
 
-    public Long id;
-
-    @NotBlank(message = "SubReddit name can not be empty or null.")
-    public String name;
-
-    public String description;
-
-    public Integer posts = 0;
+    private Long commentId;
+    private Long postId;
+    @NotBlank(message = "Comment text can not be empty or null.")
+    private String text;
+    private String username;
 }

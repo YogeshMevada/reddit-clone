@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDto {
+public class PostRequest {
     private Long postId;
     private String subRedditName;
     private String postName;

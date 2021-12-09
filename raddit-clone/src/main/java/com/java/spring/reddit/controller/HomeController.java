@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/home")
 public class HomeController {
 
-    @GetMapping("")
+    @GetMapping
     public String home() {
         log.info("Home controller reached.");
         return "<H1>Welcome Home!</H1>";

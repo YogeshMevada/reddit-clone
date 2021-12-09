@@ -1,6 +1,7 @@
 package com.java.spring.reddit.controller;
 
-import com.java.spring.reddit.dto.PostDto;
+import com.java.spring.reddit.dto.PostRequest;
+import com.java.spring.reddit.dto.PostResponse;
 import com.java.spring.reddit.service.PostService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,28 +24,28 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("")
-    public ResponseEntity<PostDto> createPost(@RequestBody @Valid final PostDto postDto) {
+    @PostMapping
+    public ResponseEntity<PostResponse> createPost(@RequestBody @Valid final PostRequest postDto) {
         return new ResponseEntity<>(postService.createPost(postDto), CREATED);
     }
 
-    @GetMapping("")
-    public ResponseEntity<List<PostDto>> getAllPosts() {
+    @GetMapping
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
         return new ResponseEntity<>(postService.findAllPosts(), OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getPost(@PathVariable @NotBlank final Long id) {
+    public ResponseEntity<PostResponse> getPost(@PathVariable @NotBlank final Long id) {
         return new ResponseEntity<>(postService.getPost(id), OK);
     }
 
-    @GetMapping("/by-subreddit/{id}")
-    public ResponseEntity<List<PostDto>> getPostsBySubReddit(@PathVariable @NotBlank final Long id) {
+    @GetMapping("/subreddit/{id}")
+    public ResponseEntity<List<PostResponse>> getPostsBySubReddit(@PathVariable @NotBlank final Long id) {
         return new ResponseEntity<>(postService.getPostsBySubReddit(id), OK);
     }
 
-    @GetMapping("/by-username/{username}")
-    public ResponseEntity<List<PostDto>> getPostsByUsername(@PathVariable @NotBlank final String username) {
-        return new ResponseEntity<>(postService.getPostsByUsername(username), OK);
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<PostResponse>> getPostsByUser(@PathVariable @NotBlank(message = "Username can not be empty or null.") final String username) {
+        return new ResponseEntity<>(postService.getPostsByUser(username), OK);
     }
 }
