@@ -1,10 +1,9 @@
 package com.java.spring.reddit.security;
 
 import com.java.spring.reddit.exception.SystemException;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,9 @@ public class JwtProvider {
 
     private KeyStore keyStore;
 
+    @Value("${jwt.expiration.time}")
+    private Long tokenExpiration;
+
     @PostConstruct
     public void init() {
         try {
@@ -35,32 +37,22 @@ public class JwtProvider {
         }
     }
 
+    public Long getTokenExpiration() {
+        return tokenExpiration;
+    }
+
     public String generateToken(final Authentication authentication) {
         final User users = (User) authentication.getPrincipal();
-        return Jwts.builder()
-                .setClaims(new HashMap<>())
-                .setSubject(users.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(getPrivateKey())
-                .compact();
+        return Jwts.builder().setClaims(new HashMap<>()).setSubject(users.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + tokenExpiration)).signWith(getPrivateKey()).compact();
     }
 
     public boolean validateToken(final String token) {
-        Jwts.parserBuilder()
-                .setSigningKey(getPublicKey())
-                .build()
-                .parseClaimsJws(token);
+        Jwts.parserBuilder().setSigningKey(getPublicKey()).build().parseClaimsJws(token);
         return true;
     }
 
     public String getUsername(final String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getPublicKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return Jwts.parserBuilder().setSigningKey(getPublicKey()).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     private PrivateKey getPrivateKey() {

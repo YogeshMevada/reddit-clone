@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class AuthenticationResponse {
 
-    private final String token;
-
     private final String username;
+    private final String token;
+    private final Long expiresAt;
 }

@@ -45,6 +45,12 @@ public class AuthController {
         return authService.login(loginRequest);
     }
 
+    @PostMapping("/logout")
+    public AuthenticationResponse logout() {
+        log.info("Login started.");
+        return authService.logout();
+    }
+
     @PostMapping("/sendmail")
     public ResponseEntity<String> mail() {
         log.info("Send mail started.");
