@@ -2,7 +2,6 @@ package com.java.spring.reddit.entities;
 
 import com.java.spring.reddit.constant.DatabaseConstants;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
@@ -15,12 +14,12 @@ import static javax.persistence.FetchType.LAZY;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Entity
 @Table(name = "post", schema = DatabaseConstants.SCHEMA)
 public class Post extends EntityModel {
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "subreddit_id", referencedColumnName = "id")
     private SubReddit subReddit;
 
     @NotBlank(message = "Post name can not be empty or null")

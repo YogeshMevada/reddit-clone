@@ -9,11 +9,11 @@ import com.java.spring.reddit.entities.VerificationToken;
 import com.java.spring.reddit.exception.AuthenticationException;
 import com.java.spring.reddit.exception.SystemException;
 import com.java.spring.reddit.exception.UserValidationException;
-import com.java.spring.reddit.repository.UsersRepository;
 import com.java.spring.reddit.repository.VerificationTokenRepository;
 import com.java.spring.reddit.security.JwtProvider;
 import com.java.spring.reddit.service.AuthService;
 import com.java.spring.reddit.service.MailService;
+import com.java.spring.reddit.service.UserService;
 import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +39,9 @@ import static com.java.spring.reddit.constant.Status.CREATED;
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final UsersRepository usersRepository;
-
     private final VerificationTokenRepository verificationTokenRepository;
+
+    private final UserService userService;
 
     private final MailService mailService;
 
@@ -64,7 +64,7 @@ public class AuthServiceImpl implements AuthService {
         users.setUsername(registerRequest.getUsername());
         users.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         users.setStatus(CREATED);
-        usersRepository.save(users);
+        userService.save(users);
 
         final String token = generateVerificationToken(users);
         mailService.sendMail(new NotificationEmail("Please Activate your Account.",
@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
         }
         //TODO: validate token expiry
         users.setStatus(ACTIVE);
-        usersRepository.save(users);
+        userService.save(users);
         log.info("User Activated successfully");
 
         mailService.sendMail(new NotificationEmail("User Account activated.",
@@ -111,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(readOnly = true)
     public Users getCurrentUser() {
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return usersRepository.findByUsername(user.getUsername()).orElseThrow(() -> new SystemException("User could not be found."));
+        return userService.findByUsername(user.getUsername()).orElseThrow(() -> new SystemException("User could not be found."));
     }
 
     private String generateVerificationToken(final Users users) {

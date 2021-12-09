@@ -40,12 +40,19 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
+    public Comment save(final Comment comment) {
+        log.info("Save comment.");
+        return commentRepository.save(comment);
+    }
+
+    @Override
+    @Transactional
     public CommentResponse createComment(final CommentRequest commentRequest) {
         log.info("Create comment.");
         final Post post = postService.findById(commentRequest.getPostId()).orElseThrow(() -> new SystemException("Could not find post by id " + commentRequest.getPostId()));
         final Users users = authService.getCurrentUser();
         final Comment comment = commentMapper.mapToComment(commentRequest, post, users);
-        final Comment savedComment = commentRepository.save(comment);
+        final Comment savedComment = save(comment);
         if (!users.getUsername().equalsIgnoreCase(post.getUser().getUsername())) {
             final String message = mailContentBuilder.build(users.getUsername() + " posted a comment on your post.");
             mailService.sendMail(new NotificationEmail(users.getUsername() + " posted a comment on your post.", post.getUser().getEmail(), message));

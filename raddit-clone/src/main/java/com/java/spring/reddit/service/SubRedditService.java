@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface SubRedditService {
 
+    SubReddit save(SubReddit subReddit);
+
     SubRedditRequest createSubReddit(SubRedditRequest subRedditDto);
 
     SubRedditResponse findAll();
