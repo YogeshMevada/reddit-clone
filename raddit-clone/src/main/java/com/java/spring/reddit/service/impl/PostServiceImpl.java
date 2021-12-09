@@ -2,12 +2,12 @@ package com.java.spring.reddit.service.impl;
 
 import com.java.spring.reddit.dto.PostRequest;
 import com.java.spring.reddit.dto.PostResponse;
-import com.java.spring.reddit.entities.Post;
-import com.java.spring.reddit.entities.SubReddit;
-import com.java.spring.reddit.entities.Users;
+import com.java.spring.reddit.entities.*;
 import com.java.spring.reddit.exception.SystemException;
 import com.java.spring.reddit.mapper.PostMapper;
+import com.java.spring.reddit.repository.CommentRepository;
 import com.java.spring.reddit.repository.PostRepository;
+import com.java.spring.reddit.repository.VoteRepository;
 import com.java.spring.reddit.service.AuthService;
 import com.java.spring.reddit.service.PostService;
 import com.java.spring.reddit.service.SubRedditService;
@@ -21,12 +21,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.java.spring.reddit.entities.VoteType.DOWN;
+import static com.java.spring.reddit.entities.VoteType.UP;
+
 @Slf4j
 @Service
 @AllArgsConstructor
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+
+    private final CommentRepository commentRepository;
+
+    private final VoteRepository voteRepository;
 
     private final SubRedditService subRedditService;
 
@@ -72,7 +79,7 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     public List<PostResponse> findAllPosts() {
         log.info("Find all posts.");
-        return postRepository.findAll().stream().map(postMapper::mapToPostDto).collect(Collectors.toList());
+        return postRepository.findAll().stream().map(this::getPostResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -81,7 +88,7 @@ public class PostServiceImpl implements PostService {
         log.info("Find all posts by subreddit id {}", id);
         final SubReddit subReddit = subRedditService.findById(id).orElseThrow(() -> new SystemException("Subreddit could not be found by id " + id));
         final List<Post> posts = postRepository.findBySubReddit(subReddit);
-        return posts.stream().map(postMapper::mapToPostDto).collect(Collectors.toList());
+        return posts.stream().map(this::getPostResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -90,6 +97,30 @@ public class PostServiceImpl implements PostService {
         log.info("Find all posts by username : ", username);
         final Users users = userService.findByUsername(username).orElseThrow(() -> new SystemException("User could not be found by name " + username));
         final List<Post> posts = postRepository.findByUser(users);
-        return posts.stream().map(postMapper::mapToPostDto).collect(Collectors.toList());
+        return posts.stream().map(this::getPostResponse).collect(Collectors.toList());
+    }
+
+    private PostResponse getPostResponse(final Post post) {
+        final PostResponse postResponse = postMapper.mapToPostDto(post);
+        postResponse.setCommentCount(commentRepository.findByPost(post).size());
+        postResponse.setUpVote(isPostUpVoted(post));
+        postResponse.setDownVote(isPostDownVoted(post));
+        return postResponse;
+    }
+
+    private boolean isPostUpVoted(final Post post) {
+        return checkVoteType(post, UP);
+    }
+
+    private boolean isPostDownVoted(final Post post) {
+        return checkVoteType(post, DOWN);
+    }
+
+    private boolean checkVoteType(final Post post, final VoteType voteType) {
+        if (authService.isLoggedIn()) {
+            final Optional<Vote> voteOptional = voteRepository.findTopByPostAndUserOrderByIdDesc(post, authService.getCurrentUser());
+            return voteOptional.filter(vote -> voteType.equals(vote.getVoteType())).isPresent();
+        }
+        return false;
     }
 }

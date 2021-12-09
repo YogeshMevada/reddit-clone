@@ -17,6 +17,7 @@ import com.java.spring.reddit.service.UserService;
 import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -99,9 +100,9 @@ public class AuthServiceImpl implements AuthService {
             final Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(authenticate);
+            SecurityContextHolder.getContext().setAuthentication(authenticate);
             final String token = jwtProvider.generateToken(authenticate);
-            return new AuthenticationResponse(token, authenticationRequest.getUsername());
+            return new AuthenticationResponse(token, authenticationRequest.getUsername(), jwtProvider.getTokenExpiration());
         } catch (final BadCredentialsException e) {
             throw new AuthenticationException("Username password is wrong.");
         }
@@ -112,6 +113,17 @@ public class AuthServiceImpl implements AuthService {
     public Users getCurrentUser() {
         final User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userService.findByUsername(user.getUsername()).orElseThrow(() -> new SystemException("User could not be found."));
+    }
+
+    @Override
+    public boolean isLoggedIn() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+    }
+
+    @Override
+    public AuthenticationResponse logout() {
+        return null;
     }
 
     private String generateVerificationToken(final Users users) {

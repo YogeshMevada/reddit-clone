@@ -13,4 +13,8 @@ public interface AuthService {
     AuthenticationResponse login(AuthenticationRequest loginRequest);
 
     Users getCurrentUser();
+
+    boolean isLoggedIn();
+
+    AuthenticationResponse logout();
 }
