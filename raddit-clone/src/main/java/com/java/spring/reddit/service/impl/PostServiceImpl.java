@@ -37,6 +37,12 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
     @Override
+    public Post save(final Post post) {
+        log.info("Save post.");
+        return postRepository.save(post);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Optional<Post> findById(final Long id) {
         log.info("Find post by id {}.", id);
@@ -58,7 +64,7 @@ public class PostServiceImpl implements PostService {
         final SubReddit subReddit = subRedditService.findByName(postRequest.getSubRedditName()).orElseThrow(() -> new SystemException("Could not find subreddit."));
         final Users users = authService.getCurrentUser();
         final Post post = postMapper.mapToPost(postRequest, subReddit, users);
-        final Post savedPost = postRepository.save(post);
+        final Post savedPost = save(post);
         return postMapper.mapToPostDto(savedPost);
     }
 

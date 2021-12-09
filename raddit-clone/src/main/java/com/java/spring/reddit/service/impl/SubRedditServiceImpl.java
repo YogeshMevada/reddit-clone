@@ -29,10 +29,16 @@ public class SubRedditServiceImpl implements SubRedditService {
     private final SubRedditMapper subRedditMapper;
 
     @Override
+    public SubReddit save(final SubReddit subReddit) {
+        log.info("Save subreddit.");
+        return subRedditRepository.save(subReddit);
+    }
+
+    @Override
     @Transactional
     public SubRedditRequest createSubReddit(final SubRedditRequest subRedditRequest) {
         final SubReddit subReddit = subRedditMapper.mapToSubReddit(subRedditRequest, authService.getCurrentUser());
-        final SubReddit savedSubReddit = subRedditRepository.save(subReddit);
+        final SubReddit savedSubReddit = save(subReddit);
         subRedditRequest.setId(savedSubReddit.getId());
         return subRedditRequest;
     }
@@ -45,7 +51,7 @@ public class SubRedditServiceImpl implements SubRedditService {
     }
 
     @Override
-    public Optional<SubReddit> findById(Long id) {
+    public Optional<SubReddit> findById(final Long id) {
         return subRedditRepository.findById(id);
     }
 

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -14,12 +13,12 @@ import static javax.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comment", schema = DatabaseConstants.SCHEMA)
-public class Comment extends EntityModel {
+@Table(name = "vote", schema = DatabaseConstants.SCHEMA)
+public class Vote extends EntityModel {
 
-    @NotEmpty
-    @Column(name = "text")
-    private String text;
+    @Column(name = "vote_type")
+    @Enumerated(EnumType.STRING)
+    private VoteType voteType;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id", referencedColumnName = "id")

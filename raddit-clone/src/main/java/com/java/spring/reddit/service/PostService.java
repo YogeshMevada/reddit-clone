@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public interface PostService {
 
+    Post save(Post post);
+
     Optional<Post> findById(Long id);
 
     PostResponse getPost(Long id);
