@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -6,10 +7,27 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+  isLoggedIn: boolean = false;
+  username: String = "";
+  users: any[];
 
-  constructor() { }
+  constructor() {
+    this.users = [];
+  }
 
   ngOnInit(): void {
   }
 
+  goToUserProfile() {
+
+  }
+
+  logout() {
+
+  }
+
+  addUser(user: any) {
+    console.log(user);
+    this.users.push(user);
+  }
 }
