@@ -1,0 +1,19 @@
+.home-container>* {
+    margin: 10px;
+}
+
+.trending-container {
+    display: grid;
+    overflow: hidden;
+}
+
+.trending-title {
+    display: block;
+}
+
+.trending-posts {
+    display: flex;
+    flex: 0;
+    flex-direction: row;
+    flex-grow: 1;
+}

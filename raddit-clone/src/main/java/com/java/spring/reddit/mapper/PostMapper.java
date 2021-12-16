@@ -16,8 +16,8 @@ public class PostMapper {
         postResponse.setPostName(post.getPostName());
         postResponse.setDescription(post.getDescription());
         postResponse.setUrl(post.getUrl());
-        postResponse.setSubRedditName(post.getSubReddit().getName());
-        postResponse.setUsername(post.getUser().getUsername());
+        postResponse.setSubRedditName("r/".concat(post.getSubReddit().getName()));
+        postResponse.setUsername("u/".concat(post.getUser().getUsername()));
         postResponse.setVoteCount(post.getVoteCount());
         return postResponse;
     }

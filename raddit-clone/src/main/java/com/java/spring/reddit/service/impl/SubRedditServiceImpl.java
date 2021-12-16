@@ -4,6 +4,7 @@ import com.java.spring.reddit.dto.SubRedditRequest;
 import com.java.spring.reddit.dto.SubRedditResponse;
 import com.java.spring.reddit.entities.SubReddit;
 import com.java.spring.reddit.exception.SystemException;
+import com.java.spring.reddit.exception.ValidationException;
 import com.java.spring.reddit.mapper.SubRedditMapper;
 import com.java.spring.reddit.repository.SubRedditRepository;
 import com.java.spring.reddit.service.AuthService;
@@ -37,6 +38,10 @@ public class SubRedditServiceImpl implements SubRedditService {
     @Override
     @Transactional
     public SubRedditRequest createSubReddit(final SubRedditRequest subRedditRequest) {
+        final Optional<SubReddit> subRedditByName = subRedditRepository.findByName(subRedditRequest.getName());
+        if(subRedditByName.isPresent()) {
+            throw new ValidationException("Subreddit with same name is already present. Please use other name.");
+        }
         final SubReddit subReddit = subRedditMapper.mapToSubReddit(subRedditRequest, authService.getCurrentUser());
         final SubReddit savedSubReddit = save(subReddit);
         subRedditRequest.setId(savedSubReddit.getId());

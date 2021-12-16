@@ -27,22 +27,9 @@
                 </button>
             </div>
             <div *ngIf="!isLoggedIn">
-                <button class="login">Log In</button>
-                <button class="signup">Sign Up</button>
+                <button routerLink="/login" class="login">Log In</button>
+                <button routerLink="/signup" class="signup">Sign Up</button>
             </div>
         </div>
     </nav>
 </header>
-
-<div class="form-container">
-    <form class="form" #userForm="ngForm" (ngSubmit)="addUser(userForm.value)">
-        <input ngModel type="text" name="username" placeholder="Please enter username">
-        <input ngModel type="text" name="email" placeholder="Please enter email id">
-        <input ngModel type="password" name="password" placeholder="Please enter password">
-        <button type="submit">Submit</button>
-    </form>
-
-    <div *ngFor="let user of users">
-        <app-user [user]='user'></app-user>
-    </div>
-</div>
