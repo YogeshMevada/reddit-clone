@@ -1,10 +1,10 @@
 package com.java.spring.reddit.config;
 
-import com.java.spring.reddit.security.JwtAuthenticationFilter;
+import com.java.spring.reddit.interceptor.ApiRequestInterceptor;
 import com.java.spring.reddit.service.impl.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,8 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -26,9 +26,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
     private final UserDetailsServiceImpl userDetailsService;
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+//    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     private final AuthenticationEntryPoint restAuthenticationEntryPoint;
+
+    private final ApiRequestInterceptor apiRequestInterceptor;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -40,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .authorizeRequests()
                 .antMatchers("/api/v1/auth/**")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/api/v1/subreddit", "/api/v1/post")
+                .permitAll()
                 .antMatchers("/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
@@ -50,15 +54,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .anyRequest()
                 .authenticated();
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Bean
-    public FilterRegistrationBean<JwtAuthenticationFilter> authFilter() {
-        final FilterRegistrationBean<JwtAuthenticationFilter> filterFilterRegistrationBean = new FilterRegistrationBean<>();
-        filterFilterRegistrationBean.setFilter(jwtAuthenticationFilter);
-        filterFilterRegistrationBean.addUrlPatterns();
-        return filterFilterRegistrationBean;
+    @Override
+    public void addInterceptors(final InterceptorRegistry registry) {
+        registry.addInterceptor(apiRequestInterceptor)
+                .addPathPatterns("/api/v1/**")
+                .excludePathPatterns("/api/v1/auth/**");
     }
 
     @Override

@@ -1,0 +1,53 @@
+.post-container {
+    border: 1px solid rgb(190, 185, 185);   
+    border-radius: 5px;
+}
+
+.post {
+    display: flex;
+    flex: 0;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+}
+
+.post-content {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+.post-title {
+    padding-left: 4px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.profile-icon-svg {
+    width: 18px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.votes {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 40px;
+}
+
+.post-head {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.posted-by {
+    padding: 0 5px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}

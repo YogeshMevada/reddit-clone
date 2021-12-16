@@ -10,7 +10,7 @@ public class SubRedditMapper {
 
     public SubReddit mapToSubReddit(final SubRedditRequest subRedditDto, final Users users) {
         final SubReddit subReddit = new SubReddit();
-        subReddit.setName("/r/".concat(subRedditDto.getName()));
+        subReddit.setName(subRedditDto.getName());
         subReddit.setDescription(subRedditDto.getDescription());
         subReddit.setUser(users);
         return subReddit;
@@ -19,7 +19,7 @@ public class SubRedditMapper {
     public SubRedditRequest mapToSubRedditDto(final SubReddit subReddit) {
         final SubRedditRequest subRedditRequestDto = new SubRedditRequest();
         subRedditRequestDto.setId(subReddit.getId());
-        subRedditRequestDto.setName(subReddit.getName());
+        subRedditRequestDto.setName("r/".concat(subReddit.getName()));
         subRedditRequestDto.setDescription(subReddit.getDescription());
         return subRedditRequestDto;
     }
