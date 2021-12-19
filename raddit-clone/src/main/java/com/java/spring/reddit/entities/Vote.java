@@ -27,4 +27,7 @@ public class Vote extends EntityModel {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Users user;
+
+    @Column(name = "active")
+    private boolean active = true;
 }

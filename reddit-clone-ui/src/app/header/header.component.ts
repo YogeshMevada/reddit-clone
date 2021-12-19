@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-header',
@@ -11,7 +11,7 @@ export class HeaderComponent implements OnInit {
   username: String = "";
   users: any[];
 
-  constructor() {
+  constructor(private ngbModal: NgbModal) {
     this.users = [];
   }
 
@@ -20,6 +20,10 @@ export class HeaderComponent implements OnInit {
 
   goToUserProfile() {
 
+  }
+
+  open(modal: any) {
+    this.ngbModal.open(modal);
   }
 
   logout() {

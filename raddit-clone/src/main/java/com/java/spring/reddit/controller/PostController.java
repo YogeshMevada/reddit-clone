@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CREATED;
@@ -32,6 +31,11 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostResponse>> getAllPosts() {
         return new ResponseEntity<>(postService.findAllPosts(), OK);
+    }
+
+    @GetMapping("/trending")
+    public ResponseEntity<List<PostResponse>> getAllTrendingPosts() {
+        return new ResponseEntity<>(postService.findAllTrendingPosts(), OK);
     }
 
     @GetMapping("/{id}")

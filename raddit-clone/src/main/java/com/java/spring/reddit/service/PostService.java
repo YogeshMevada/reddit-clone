@@ -19,6 +19,8 @@ public interface PostService {
 
     List<PostResponse> findAllPosts();
 
+    List<PostResponse> findAllTrendingPosts();
+
     List<PostResponse> getPostsBySubReddit(Long id);
 
     List<PostResponse> getPostsByUser(String name);

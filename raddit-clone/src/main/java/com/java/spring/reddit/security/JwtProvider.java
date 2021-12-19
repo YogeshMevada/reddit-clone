@@ -1,11 +1,10 @@
 package com.java.spring.reddit.security;
 
+import com.java.spring.reddit.entities.Users;
 import com.java.spring.reddit.exception.SystemException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -41,9 +40,14 @@ public class JwtProvider {
         return tokenExpiration;
     }
 
-    public String generateToken(final Authentication authentication) {
-        final User users = (User) authentication.getPrincipal();
-        return Jwts.builder().setClaims(new HashMap<>()).setSubject(users.getUsername()).setIssuedAt(new Date(System.currentTimeMillis())).setExpiration(new Date(System.currentTimeMillis() + tokenExpiration)).signWith(getPrivateKey()).compact();
+    public String generateToken(final Users users) {
+        return Jwts.builder()
+                .setClaims(new HashMap<>())
+                .setSubject(users.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenExpiration))
+                .signWith(getPrivateKey())
+                .compact();
     }
 
     public boolean validateToken(final String token) {

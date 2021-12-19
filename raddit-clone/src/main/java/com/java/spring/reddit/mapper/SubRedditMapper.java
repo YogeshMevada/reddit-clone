@@ -19,7 +19,7 @@ public class SubRedditMapper {
     public SubRedditRequest mapToSubRedditDto(final SubReddit subReddit) {
         final SubRedditRequest subRedditRequestDto = new SubRedditRequest();
         subRedditRequestDto.setId(subReddit.getId());
-        subRedditRequestDto.setName("r/".concat(subReddit.getName()));
+        subRedditRequestDto.setName(subReddit.getName());
         subRedditRequestDto.setDescription(subReddit.getDescription());
         return subRedditRequestDto;
     }

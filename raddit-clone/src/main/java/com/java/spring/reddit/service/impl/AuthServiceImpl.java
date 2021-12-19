@@ -18,9 +18,7 @@ import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -29,7 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.java.spring.reddit.constant.Status.ACTIVE;
@@ -50,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthenticationManager authenticationManager;
+//    private final AuthenticationManager authenticationManager;
 
     private final JwtProvider jwtProvider;
 
@@ -78,8 +75,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void verifyToken(final String token) {
-        final Optional<VerificationToken> tokens = verificationTokenRepository.findByToken(token);
-        final VerificationToken verificationToken = tokens.orElseThrow(() -> new ValidationException("Token not found."));
+        final VerificationToken verificationToken = verificationTokenRepository.findByToken(token).orElseThrow(() -> new ValidationException("Token not found."));
         final Users users = verificationToken.getUser();
         if (ACTIVE.equals(users.getStatus())) {
             throw new UserValidationException("User is already active & verified.");
@@ -97,11 +93,16 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse login(final AuthenticationRequest authenticationRequest) {
         try {
-            final Authentication authenticate = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-                            authenticationRequest.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authenticate);
-            final String token = jwtProvider.generateToken(authenticate);
+//            final Authentication authenticate = authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+//                            authenticationRequest.getPassword()));
+//            SecurityContextHolder.getContext().setAuthentication(authenticate);
+
+            final Users users = userService.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new UserValidationException("User not found."));
+            if(!passwordEncoder.matches(users.getPassword(), authenticationRequest.getPassword())) {
+                throw new UserValidationException("Please enter correct Username and Password.");
+            }
+            final String token = jwtProvider.generateToken(users);
             return new AuthenticationResponse(token, authenticationRequest.getUsername(), jwtProvider.getTokenExpiration());
         } catch (final BadCredentialsException e) {
             throw new AuthenticationException("Username password is wrong.");
