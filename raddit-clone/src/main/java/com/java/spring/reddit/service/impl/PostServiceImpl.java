@@ -83,6 +83,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostResponse> findAllTrendingPosts() {
+        log.info("Find all trending posts.");
+//        return postRepository.findAllTrending().stream().map(this::getPostResponse).collect(Collectors.toList());
+        return null;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<PostResponse> getPostsBySubReddit(final Long id) {
         log.info("Find all posts by subreddit id {}", id);

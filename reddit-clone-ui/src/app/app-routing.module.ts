@@ -7,8 +7,6 @@ import { SubredditComponent } from './page/subreddit/subreddit.component';
 
 const routes: Routes = [
   { path: "", component: HomeComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
   { path: 'r/:name', component: SubredditComponent }
 ]
 

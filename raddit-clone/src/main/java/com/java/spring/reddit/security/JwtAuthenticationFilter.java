@@ -21,7 +21,7 @@
 //import java.io.IOException;
 //
 //@Slf4j
-//@Component
+////@Component
 //@AllArgsConstructor
 //public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //
@@ -59,7 +59,6 @@
 //                antPathMatcher.match("/configuration/security", request.getServletPath()) ||
 //                antPathMatcher.match("/swagger-ui.html", request.getServletPath()) ||
 //                antPathMatcher.match("/webjars/**", request.getServletPath());
-//
 //    }
 //
 //    private String getAuthToken(final HttpServletRequest request) {

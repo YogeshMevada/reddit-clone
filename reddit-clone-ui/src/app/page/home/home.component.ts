@@ -11,11 +11,24 @@ export class HomeComponent implements OnInit {
 
   trendingPosts: Array<Post> = [];
   posts: Array<Post> = [];
+  topCommunities: Array<String> = [];
+  popularCommunities: Array<String> = [];
 
   constructor(private postService: PostService) {
   }
 
   ngOnInit(): void {
+    this.getAllTrendingPosts();
+    this.getAllPosts();
+    this.getTopCommunities();
+    this.getPopularCommunities();
+  }
+
+  getAllTrendingPosts() {
+
+  }
+
+  getAllPosts() {
     this.postService.getAllPosts()
       .subscribe(data => {
         for (var post of data) {
@@ -24,5 +37,13 @@ export class HomeComponent implements OnInit {
           console.log(post);
         }
       });
+  }
+
+  getTopCommunities() {
+
+  }
+  
+  getPopularCommunities() {
+
   }
 }

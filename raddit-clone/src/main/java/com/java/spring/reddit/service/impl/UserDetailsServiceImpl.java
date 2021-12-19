@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import javax.validation.ValidationException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 
 import static com.java.spring.reddit.constant.Status.ACTIVE;
 
@@ -26,8 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final Optional<Users> userOptional = userService.findByUsername(username);
-        final Users user = userOptional.orElseThrow(() -> new ValidationException("No User found"));
+        final Users user = userService.findByUsername(username).orElseThrow(() -> new ValidationException("No User found"));
         switch (user.getStatus()) {
             case CREATED:
                 throw new ValidationException("User is not verified. Please verify user.");

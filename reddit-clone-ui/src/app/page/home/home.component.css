@@ -1,9 +1,15 @@
+.home-container {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
 .home-container>* {
     margin: 10px;
 }
 
 .trending-container {
-    display: grid;
+    grid-column: 1 / span 3;
     overflow: hidden;
 }
 
@@ -16,4 +22,13 @@
     flex: 0;
     flex-direction: row;
     flex-grow: 1;
+}
+
+.posts-container {
+    grid-column: 1 / span 2;
+    display: block;
+}
+
+.top-communities-container {
+    display: block;
 }

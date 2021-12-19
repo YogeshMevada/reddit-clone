@@ -13,4 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findBySubReddit(SubReddit subReddit);
 
     List<Post> findByUser(Users users);
+
+//    @Query("Select p FROM Post p LEFT JOIN Comments WHERE ")
+//    List<Post> findAllTrending();
 }
