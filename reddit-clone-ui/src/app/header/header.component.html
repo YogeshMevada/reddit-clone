@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar flex-grow-1">
         <div class="logo flex-grow-1">
-            <a aria-label="Home" routerLink="/">
+            <a aria-label="Home" routerLink="/" class="flex-grow-1">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="reddit-icon-svg">
                     <g>
                         <circle fill="#FF4500" cx="10" cy="10" r="10"></circle>
@@ -10,8 +10,8 @@
                         </path>
                     </g>
                 </svg>
-                <span class="reddit-text">
-                    Reddit Clone
+                <span class="reddit-text flex-grow-1">
+                    reddit clone
                 </span>
             </a>
         </div>
@@ -36,11 +36,12 @@
 
 
 <ng-template #login let-modal>
-    <app-login></app-login>
+    <app-login [modal]="modal"></app-login>
 </ng-template>
 
 <ng-template #signup let-modal>
-    <div class="modal-header">
+    <app-signup></app-signup>
+    <!-- <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Signup</h4>
         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
@@ -62,5 +63,5 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Signup</button>
-    </div>
+    </div> -->
 </ng-template>

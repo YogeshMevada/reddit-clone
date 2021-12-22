@@ -1,11 +1,38 @@
-<p>login works!</p>
 <div class="login-container">
     <div class="login-title">
-
+        <h2>Login</h2>
     </div>
-    <div class="login-form">
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
-
-        </form>
-    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
+        <div class="login-form">
+            <div>
+                <label><b>Username</b></label>
+                <input formControlName="username" type="text" name="username" placeholder="Please enter Username" />
+                <span
+                    *ngIf="loginForm.controls['username'].invalid && (loginForm.controls['username'].dirty || loginForm.controls['username'].touched)"
+                    class="alert">
+                    <div *ngIf="loginForm.controls['username'].errors">
+                        Please enter username
+                    </div>
+                </span>
+            </div>
+            <div>
+                <label><b>Password</b></label>
+                <input formControlName="password" type="password" name="password" placeholder="Please enter Password">
+                <span
+                    *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].dirty || loginForm.controls['password'].touched)"
+                    class="alert">
+                    <div *ngIf="loginForm.controls['password'].errors">
+                        Please enter password
+                    </div>
+                </span>
+            </div>
+            <div>
+                <input type="checkbox" checked="checked" name="remember"> Remember me
+            </div>
+            <div>
+                <button type="submit">Login</button>
+                <span class="password">Forgot <a href="#">password?</a></span>
+            </div>
+        </div>
+    </form>
 </div>
