@@ -30,8 +30,9 @@ public class ApiRequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
         log.info("pre handle {}", request.getServletPath());
-        authorize(request);
-        return true;
+//        authorize(request);
+//        return true;
+        return HandlerInterceptor.super.preHandle(request, response, handler);
     }
 
     @Override

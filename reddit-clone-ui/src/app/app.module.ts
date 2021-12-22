@@ -9,7 +9,6 @@ import { AuthModule } from './auth/auth.module';
 import { HeaderComponent } from './header/header.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserComponent } from './user/user.component';
 import { HomeComponent } from './page/home/home.component';
 import { PostComponent } from './component/post/post.component';
 import { TrendingPostComponent } from './component/trending-post/trending-post.component';
@@ -19,7 +18,6 @@ import { SubredditComponent } from './page/subreddit/subreddit.component'
   declarations: [
     AppComponent,
     HeaderComponent,
-    UserComponent,
     HomeComponent,
     PostComponent,
     TrendingPostComponent,
@@ -29,9 +27,9 @@ import { SubredditComponent } from './page/subreddit/subreddit.component'
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    FormsModule,
     NgbModule,
     AuthModule
   ],

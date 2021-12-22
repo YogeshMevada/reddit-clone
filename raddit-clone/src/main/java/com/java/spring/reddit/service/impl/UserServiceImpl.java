@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<Users> findByUsername(final String username) {
+        log.info("Fined user bu username.");
         return usersRepository.findByUsername(username);
     }
 }

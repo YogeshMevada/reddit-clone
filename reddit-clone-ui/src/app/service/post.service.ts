@@ -11,6 +11,7 @@ export class PostService {
   constructor(private http: HttpClient) { }
 
   getAllPosts(): Observable<Array<Post>> {
+    console.log("Get Post.")
     return this.http.get<Array<Post>>("http://localhost:8080/reddit-clone/api/v1/post");
   }
 }

@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../model/post';
 import { PostService } from '../../service/post.service';
@@ -30,11 +31,19 @@ export class HomeComponent implements OnInit {
 
   getAllPosts() {
     this.postService.getAllPosts()
-      .subscribe(data => {
-        for (var post of data) {
-          this.trendingPosts.push(post);
-          this.posts.push(post);
-          console.log(post);
+      .subscribe({
+        next: (res) => {
+          console.log(res);
+          for (var post of res) {
+            this.trendingPosts.push(post);
+            this.posts.push(post);
+          }
+        },
+        error: (err: HttpErrorResponse) => {
+          console.log("Get Post Error response: " + err);
+        },
+        complete: () => {
+          console.log("Get Post Complete");
         }
       });
   }
@@ -42,7 +51,7 @@ export class HomeComponent implements OnInit {
   getTopCommunities() {
 
   }
-  
+
   getPopularCommunities() {
 
   }

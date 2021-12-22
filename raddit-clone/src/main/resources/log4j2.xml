@@ -1,9 +1,9 @@
 <Configuration name="reddit-clone-logger">
     <Properties>
-        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS}|%5p|${hostName}|%15.15t|%X{X_REQUEST_ID}|%-40.40c{1.}:%m%n%ex</Property>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS}|%5p|${hostName}|%15.15t|%X{X_REQUEST_ID}|%-40.40c%L{1.}:%m%n%ex</Property>
     </Properties>
     <Appenders>
-        <Console name="Console-Appender" target="SYSTEM_OUT">
+        <Console name="Console-Appender" target="SYSTEM_OUT" follow="true">
             <PatternLayout patter="${LOG_PATTERN}"/>
         </Console>
         <Log4j2Appender name="Log4j2Appender">
@@ -12,4 +12,9 @@
             <tags>TEST</tags>
         </Log4j2Appender>
     </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console-Appender"/>
+        </Root>
+    </Loggers>
 </Configuration>

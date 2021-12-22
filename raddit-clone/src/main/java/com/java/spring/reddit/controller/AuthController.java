@@ -29,7 +29,7 @@ public class AuthController {
     public ResponseEntity<String> register(@RequestBody @Valid final RegisterRequest registerRequest) {
         log.info("Registration started.");
         authService.register(registerRequest);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        return new ResponseEntity<>("User registered successfully. Please check your email & verify.", HttpStatus.OK);
     }
 
     @GetMapping("/verification/{token}")

@@ -3,6 +3,7 @@ package com.java.spring.reddit.service.impl;
 import com.java.spring.reddit.entities.Users;
 import com.java.spring.reddit.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +18,7 @@ import java.util.Collections;
 
 import static com.java.spring.reddit.constant.Status.ACTIVE;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -25,7 +27,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final Users user = userService.findByUsername(username).orElseThrow(() -> new ValidationException("No User found"));
+        log.info(">>>>>>>>>> UserDetailsServiceImpl loadUserByUsername: {}", username);
+        final Users user = userService.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No User found"));
         switch (user.getStatus()) {
             case CREATED:
                 throw new ValidationException("User is not verified. Please verify user.");

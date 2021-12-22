@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -7,15 +8,16 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  isLoggedIn: boolean = false;
-  username: String = "";
-  users: any[];
 
-  constructor(private ngbModal: NgbModal) {
-    this.users = [];
+  public isLoggedIn: boolean = false;
+  username: String;
+
+  constructor(private ngbModal: NgbModal, private authService: AuthService) {
+
   }
 
   ngOnInit(): void {
+    this.isLoggedIn = this.authService.isLoggedIn();
   }
 
   goToUserProfile() {
@@ -27,11 +29,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-
-  }
-
-  addUser(user: any) {
-    console.log(user);
-    this.users.push(user);
+    this.authService.logout();
+    location.reload();
   }
 }

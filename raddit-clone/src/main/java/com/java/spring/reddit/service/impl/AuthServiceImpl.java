@@ -18,7 +18,9 @@ import com.java.spring.reddit.validator.UserValidator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -47,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-//    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     private final JwtProvider jwtProvider;
 
@@ -93,17 +95,14 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse login(final AuthenticationRequest authenticationRequest) {
         try {
-//            final Authentication authenticate = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
-//                            authenticationRequest.getPassword()));
-//            SecurityContextHolder.getContext().setAuthentication(authenticate);
+//            final Users users = userService.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new UserValidationException("User not found."));
+//            if (!passwordEncoder.matches(authenticationRequest.getPassword(), users.getPassword())) {
+//                throw new UserValidationException("Please enter correct Username and Password.");
+//            }
 
-            final Users users = userService.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new UserValidationException("User not found."));
-            if(!passwordEncoder.matches(users.getPassword(), authenticationRequest.getPassword())) {
-                throw new UserValidationException("Please enter correct Username and Password.");
-            }
-            final String token = jwtProvider.generateToken(users);
-            return new AuthenticationResponse(token, authenticationRequest.getUsername(), jwtProvider.getTokenExpiration());
+            final Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
+            final String token = jwtProvider.generateToken((User) authenticate.getPrincipal());
+            return new AuthenticationResponse(authenticationRequest.getUsername(), token, jwtProvider.getTokenExpiration());
         } catch (final BadCredentialsException e) {
             throw new AuthenticationException("Username password is wrong.");
         }
